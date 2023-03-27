@@ -42,10 +42,7 @@ defmodule DSLm.Complex.Rect do
   def to_rect(c) when is_rect(c), do: c
 
   def to_rect(c) when is_polar(c) do
-    real = c.mag * :math.cos(c.angle)
-    imag = c.mag * :math.sin(c.angle)
-
-    %DSLm.Complex.Rect{real: real, imag: imag}
+    new(c.mag * :math.cos(c.angle), c.mag * :math.sin(c.angle))
   end
 end
 
