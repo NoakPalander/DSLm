@@ -2,4 +2,23 @@
 I recently studied a Haskell/Math course in math DSL's and decided to recreate a few of them in Elixir instead.
 
 * Complex numbers
-Complex numbers will be primarily represented in rectangular form,
+Complex numbers will be primarily represented in rectangular form, and will be provided through the ~DSLm.Complex~ module. It internally uses two submodules, ~DSLm.Complex.Rect~ providing addition and subtraction, and ~DSLm.Complex.Polar~ providing multiplication and divsion.
+
+In addition to that a custom sigil will be created given some ~use~ parameter for the imaginary unit. As an example with the unit ~j~:
+
+#+begin_src elixir
+defmodule Foo do
+  use DSLm.Complex, unit: :j
+
+  def main do
+    a = 10 + ~j<5>
+    b = 20 + ~j<10>
+    c = a + b
+    d = a * b
+
+    IO.puts c # 30 + i15
+    IO.puts d # 150 + i200
+    IO.puts DSLm.Complex.polar(d) # 250 * e^i0.923..
+  end
+end
+#+end_src
