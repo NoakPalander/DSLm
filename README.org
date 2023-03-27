@@ -1,0 +1,5 @@
+* Domain Specific Languages of Mathematics
+I recently studied a Haskell/Math course in math DSL's and decided to recreate a few of them in Elixir instead.
+
+* Complex numbers
+Complex numbers will be primarily represented in rectangular form,
