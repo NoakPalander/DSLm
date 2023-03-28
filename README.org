@@ -4,8 +4,16 @@ I recently studied a Haskell/Math course in math DSL's and decided to recreate a
 * Complex numbers
 Complex numbers will be primarily represented in rectangular form, and will be provided through the ~DSLm.Complex~ module. It internally uses two submodules, ~DSLm.Complex.Rect~ providing addition and subtraction, and ~DSLm.Complex.Polar~ providing multiplication and divsion.
 
-In addition to that a custom sigil will be created given some ~use~ parameter for the imaginary unit. As an example with the unit ~j~:
+In addition to that a custom sigil will be created given some ~use~ parameter for the imaginary unit.
 
+** Structure
+I structured the concept of complex numbers relatively closely to how it was done in Haskell, with some minor differences. Due to the nature of Elixir and dynamic typing, and an overall less emphasis on types, there wasn't exactly an equivalent to Haskell's type classes. Instead, I opted to use protocols to represent the different monoids. I took some creative liberty and modified the ~Additive~, ~Multiplicative~ monoids, and the corresponding groups, to perform addition, subtraction, multiplication, and division (directly).
+
+Then I utilized Elixir's operator overloading, just delegating the calls to the protocol implementations. This reduced the boilerplate code in both the polar and rectangular representation, moving all the calculations to the protocols instead.
+
+The different monoids and groups can be found in the ~lib/monoids~ directory, and the evaluator in the ~lib/complex/evaluator.ex~ file.
+
+** Example
 #+begin_src elixir
 defmodule Foo do
   use DSLm.Complex, unit: :j
@@ -18,7 +26,7 @@ defmodule Foo do
 
     IO.puts c # 30 + i15
     IO.puts d # 150 + i200
-    IO.puts DSLm.Complex.polar(d) # 250 * e^i0.923..
+    IO.puts polar(d) # 250 * e^i0.923..
   end
 end
 #+end_src

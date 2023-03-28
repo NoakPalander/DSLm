@@ -7,8 +7,9 @@ defmodule DSLm.Complex do
 
   defmacro __using__(unit: unit) do
     quote do
-      import Kernel, except: [+: 2, -: 2, *: 2, /: 2, **: 2]
       import unquote(__MODULE__)
+
+      use DSLm.Complex.Evaluator
 
       unit = unquote(unit)
       def unquote(:"sigil_#{Atom.to_string(unit)}")(str, _) do
@@ -33,76 +34,4 @@ defmodule DSLm.Complex do
 
   def polar(c), do: Polar.to_polar(c)
   def rect(c), do: Rect.to_rect(c)
-
-  def a + b when is_complex(a) and is_complex(b) do
-    Rect.add(Rect.to_rect(a), Rect.to_rect(b))
-  end
-
-  def a + b when is_complex(a) do
-    Rect.add(Rect.to_rect(a), b)
-  end
-
-  def a + b when is_complex(b) do
-    Rect.add(a, Rect.to_rect(b))
-  end
-
-  def a + b do
-    Kernel.+(a, b)
-  end
-
-  def a - b when is_complex(a) and is_complex(b) do
-    Rect.sub(Rect.to_rect(a), Rect.to_rect(b))
-  end
-
-  def a - b when is_complex(a) do
-    Rect.sub(Rect.to_rect(a), b)
-  end
-
-  def a - b when is_complex(b) do
-    Rect.sub(a, Rect.to_rect(b))
-  end
-
-  def a - b do
-    Kernel.-(a, b)
-  end
-
-  def a * b when is_complex(a) and is_complex(b) do
-    Polar.mul(Polar.to_polar(a), Polar.to_polar(b)) |> Rect.to_rect()
-  end
-
-  def a * b when is_complex(a) do
-    Polar.mul(Polar.to_polar(a), b) |> Rect.to_rect()
-  end
-
-  def a * b when is_complex(b) do
-    Polar.mul(a, Polar.to_polar(b)) |> Rect.to_rect()
-  end
-
-  def a * b do
-    Kernel.*(a, b)
-  end
-
-  def a / b when is_complex(a) and is_complex(b) do
-    Polar.div(Polar.to_polar(a), Polar.to_polar(b)) |> Rect.to_rect()
-  end
-
-  def a / b when is_complex(a) do
-    Polar.div(Polar.to_polar(a), b) |> Rect.to_rect()
-  end
-
-  def a / b when is_complex(b) do
-    Polar.div(a, Polar.to_polar(b)) |> Rect.to_rect()
-  end
-
-  def a / b do
-    Kernel./(a, b)
-  end
-
-  def a ** b when is_complex(a) and is_number(b) do
-    Polar.pow(Polar.to_polar(a), b) |> Rect.to_rect()
-  end
-
-  def a ** b do
-    Kernel.**(a, b)
-  end
 end
